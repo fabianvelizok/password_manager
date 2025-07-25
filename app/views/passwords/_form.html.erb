@@ -1,0 +1,26 @@
+<%= form_with model: password do |f| %>
+  <%= f.object.inspect %>
+  <% if f.object.errors.any? %>
+    <div class="my-3">
+      <% f.object.errors.full_messages.each do |e| %>
+        <div class="text-red-800"><%= e %></div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :url %>
+    <%= f.url_field :url %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :username %>
+    <%= f.text_field :username %>
+  </div>
+  <div class="mb-3">
+    <%= f.label :password %>
+    <%= f.text_field :password %>
+  </div>
+  <div>
+    <%= f.submit "Send", class: "bg-sky-500 px-5 py-2 rounded hover:bg-sky-700" %>
+  </div>
+<% end %>
