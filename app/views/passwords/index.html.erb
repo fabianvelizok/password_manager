@@ -1,4 +1,17 @@
-<h1 class="text-xl font-bold mb-3">Passwords</h1>
-<%= link_to "New Password", new_password_path, class: "bg-sky-500" %>
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold tracking-tight">Passwords</h1>
+    <%= link_to "New Password", new_password_path, class: "inline-flex items-center rounded-lg border px-3 py-2 text-sm hover:bg-gray-50" %>
+  </div>
 
-<%= render @passwords %>
+  <% if @passwords.any? %>
+    <div class="space-y-3">
+      <%= render @passwords %>
+    </div>
+  <% else %>
+    <div class="rounded-2xl border bg-white p-8 text-center text-gray-600">
+      <p class="mb-2 font-medium">No passwords yet</p>
+      <%= link_to "Create your first password", new_password_path, class: "inline-flex items-center rounded-lg border px-3 py-2 text-sm hover:bg-gray-50" %>
+    </div>
+  <% end %>
+</div>

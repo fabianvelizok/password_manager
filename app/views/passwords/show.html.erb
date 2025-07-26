@@ -1,3 +1,26 @@
-<h1>New Password</h1>
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <div class="mb-6 flex items-center justify-between">
+    <h1 class="text-2xl font-semibold tracking-tight">Password</h1>
+    <%= link_to "Back", passwords_path, class: "text-sm rounded-lg border px-3 py-2 hover:bg-gray-50" %>
+  </div>
 
-<%= render "form", password: @password %>
+  <div class="rounded-2xl border bg-white shadow-sm mb-6">
+    <div class="p-6 space-y-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Username / Email</p>
+        <div class="relative mt-2">
+          <pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-gray-100"><code class="font-mono text-sm"><%= @password.username %></code></pre>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Password</p>
+        <div class="relative mt-2">
+          <pre class="overflow-x-auto rounded-lg bg-gray-900 p-3 text-gray-100"><code class="font-mono text-sm"><%= @password.password %></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%= link_to "Edit", edit_password_path(@password), class: "text-sm rounded-lg border px-3 py-2 hover:bg-gray-50" %>
+</div>

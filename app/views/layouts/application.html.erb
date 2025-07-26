@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Password Manager" %></title>
+    <title><%= content_for?(:title) ? yield(:title) : "Password Manager" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -20,23 +20,33 @@
   </head>
 
   <body class="bg-gray-100 text-gray-900 font-sans antialiased min-h-screen flex flex-col">
-    <header class="bg-white shadow p-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold">
-        <%= link_to root_path do %>
-          <%= content_for(:title) || "PM" %>
-        <% end %>
-      </h1>
+    <header class="sticky top-0 z-40 border-b bg-white/80 backdrop-blur">
+      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <%= link_to "PM", root_path, class: "text-base font-semibold tracking-tight" %>
+        <nav class="flex items-center gap-2">
+          <%= link_to "Passwords", passwords_path, class: "text-sm rounded-lg border px-3 py-2 hover:bg-gray-50" %>
+          <%= link_to "New", new_password_path, class: "text-sm rounded-lg border px-3 py-2 hover:bg-gray-50" %>
+          <% if user_signed_in? %>
+            <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "text-sm rounded-lg border px-3 py-2 hover:bg-gray-50" %>
+          <% else %>
+            <%= link_to "Sign in", new_user_session_path, class: "text-sm rounded-lg border px-3 py-2 hover:bg-gray-50" %>
+          <% end %>
+        </nav>
+      </div>
     </header>
 
     <main class="flex-grow container mx-auto px-4 py-6">
-      <% if notice %>
-        <p class="mb-4 text-sm text-green-700 bg-green-100 border border-green-200 rounded p-2"><%= notice %></p>
+      <% flash.each do |type, message| %>
+        <% styles = case type.to_s
+          when "notice", "success" then "text-green-700 bg-green-50 border-green-200"
+          when "alert", "error" then "text-red-700 bg-red-50 border-red-200"
+          else "text-gray-800 bg-gray-50 border-gray-200"
+        end %>
+        <div class="mb-4 flex items-start justify-between rounded-lg border p-3 <%= styles %>">
+          <p class="text-sm"><%= message %></p>
+          <button type="button" class="ml-4 text-xs opacity-70 hover:opacity-100" onclick="this.closest('div').remove()">✕</button>
+        </div>
       <% end %>
-
-      <% if alert %>
-        <p class="mb-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded p-2"><%= alert %></p>
-      <% end %>
-
       <%= yield %>
     </main>
   </body>
