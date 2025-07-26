@@ -23,6 +23,17 @@ class PasswordsController < ApplicationController
   def show
   end
 
+  def edit
+  end
+
+  def update
+    if @password.update(password_params)
+      redirect_to @password
+    else
+      render :edit, :unproccessable_entity
+    end
+  end
+
   private
 
   def password_params
