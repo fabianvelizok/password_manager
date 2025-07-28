@@ -1,8 +1,8 @@
 class SharesController < ApplicationController
   before_action :set_password
+  before_action :require_shareable_permission
 
   def new
-    @users = User.excluding(@password.users)
     @user_password = UserPassword.new
   end
 
@@ -17,7 +17,17 @@ class SharesController < ApplicationController
   end
 
   def destroy
-    @password.user_passwords.where(user_id: params[:id]).destroy_all
+    # @password.user_passwords.where(user_id: params[:id]).destroy_all
+    # redirect_to @password, notice: "User removed successfully."
+    #
+    user_password = @password.user_passwords.find_by!(user_id: params[:id])
+
+    if user_password.role == "owner" && @password.user_passwords.where(role: "owner").count <= 1
+      redirect_to @password, alert: "You can't remove the last owner."
+      return
+    end
+
+    user_password.destroy!
     redirect_to @password, notice: "User removed successfully."
   end
 
@@ -28,6 +38,10 @@ class SharesController < ApplicationController
   end
 
   def user_password_params
-    params.require(:user_password).permit(:user_id)
+    params.require(:user_password).permit(:user_id, :role)
+  end
+
+  def require_shareable_permission
+    redirect_to @password unless current_user_password.shareable?
   end
 end
